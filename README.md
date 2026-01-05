@@ -1,3 +1,7 @@
+## 🚀 Buka Aplikasi
+
+👉 [Klik di sini](https://Samashi11.github.io/dashboard_penjualan_kwu.github.io/dashboard.html)
+
 # 📊 Dashboard Penjualan Sambal
 
 Dashboard Penjualan Sambal adalah aplikasi web statis yang menampilkan **ringkasan penjualan**, **target vs realisasi**, **rincian penjualan**, serta **varian produk terlaris**.  
@@ -24,17 +28,18 @@ Project ini dibuat untuk kebutuhan **laporan, presentasi, tugas kuliah, atau sho
 
 ## 📦 Data Penjualan (Contoh)
 
-- **Total produk terjual**: 15 produk  
-- **Harga per produk**: Rp 13.000  
-- **Bulan**: Desember 2025  
+- **Total produk terjual**: 15 produk
+- **Harga per produk**: Rp 13.000
+- **Bulan**: Desember 2025
 
 ### Distribusi Varian:
-| Varian           | Jumlah |
-|------------------|--------|
-| Sambal Bawang    | 7      |
-| Sambal Ijo       | 5      |
-| Sambal Terasi    | 3      |
-| **Total**        | **15** |
+
+| Varian        | Jumlah |
+| ------------- | ------ |
+| Sambal Bawang | 7      |
+| Sambal Ijo    | 5      |
+| Sambal Terasi | 3      |
+| **Total**     | **15** |
 
 ---
 
@@ -53,4 +58,3 @@ Project ini dibuat untuk kebutuhan **laporan, presentasi, tugas kuliah, atau sho
 - 2. Salman Maula Ash Shidqi
 - 3. Iqbal Dwi Kurniawan
 - 4. M. Ikhsan Aflahal
-
