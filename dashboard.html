@@ -47,6 +47,7 @@
         },
       };
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       body {
         font-family: "Inter", sans-serif;
@@ -484,204 +485,118 @@
           </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="rounded-xl bg-white p-6 shadow-soft border border-gray-100">
+  <h3 class="text-lg font-bold text-gray-800 mb-4">
+    Target vs Realisasi Penjualan
+  </h3>
+
+  <div class="h-[260px]">
+    <canvas id="targetRealisasiChart"></canvas>
+  </div>
+
+  <div class="mt-4 flex justify-end gap-4 text-xs text-text-muted">
+    <span class="flex items-center gap-1">
+      <span class="w-2 h-2 bg-gray-300 rounded-full"></span> Target
+    </span>
+    <span class="flex items-center gap-1">
+      <span class="w-2 h-2 bg-primary rounded-full"></span> Realisasi
+    </span>
+  </div>
+</div>
+
           <div
-            class="rounded-xl bg-white p-6 shadow-soft border border-gray-100"
-          >
-            <h3 class="text-lg font-bold text-gray-800 mb-6">
-              Target vs Realisasi
-            </h3>
-            <div class="flex items-end justify-between h-[200px] px-2 gap-4">
-              <div class="flex flex-col items-center gap-2 w-full">
-                <div class="w-full flex justify-center items-end gap-1 h-full">
-                  <div
-                    class="w-3 bg-gray-200 h-[60%] rounded-t-sm"
-                    title="Target"
-                  ></div>
-                  <div
-                    class="w-3 bg-primary h-[55%] rounded-t-sm"
-                    title="Realisasi"
-                  ></div>
-                </div>
-                <span class="text-xs text-text-muted">Agu</span>
-              </div>
-              <div class="flex flex-col items-center gap-2 w-full">
-                <div class="w-full flex justify-center items-end gap-1 h-full">
-                  <div
-                    class="w-3 bg-gray-200 h-[70%] rounded-t-sm"
-                    title="Target"
-                  ></div>
-                  <div
-                    class="w-3 bg-primary h-[75%] rounded-t-sm"
-                    title="Realisasi"
-                  ></div>
-                </div>
-                <span class="text-xs text-text-muted">Sep</span>
-              </div>
-              <div class="flex flex-col items-center gap-2 w-full">
-                <div class="w-full flex justify-center items-end gap-1 h-full">
-                  <div
-                    class="w-3 bg-gray-200 h-[85%] rounded-t-sm"
-                    title="Target"
-                  ></div>
-                  <div
-                    class="w-3 bg-primary h-[90%] rounded-t-sm"
-                    title="Realisasi"
-                  ></div>
-                </div>
-                <span class="text-xs font-bold text-primary">Okt</span>
-              </div>
-              <div class="flex flex-col items-center gap-2 w-full opacity-60">
-                <div class="w-full flex justify-center items-end gap-1 h-full">
-                  <div
-                    class="w-3 bg-gray-200 h-[90%] rounded-t-sm"
-                    title="Target"
-                  ></div>
-                  <div
-                    class="w-3 bg-gray-400 h-[0%] rounded-t-sm border border-dashed border-gray-400"
-                    title="Realisasi"
-                  ></div>
-                </div>
-                <span class="text-xs text-text-muted">Nov</span>
-              </div>
-            </div>
-          </div>
-          <div
-            class="lg:col-span-2 rounded-xl bg-white shadow-soft border border-gray-100 overflow-hidden flex flex-col"
-          >
-            <div
-              class="p-6 border-b border-gray-100 flex items-center justify-between"
+  class="lg:col-span-2 rounded-xl bg-white shadow-soft border border-gray-100 overflow-hidden flex flex-col"
+>
+  <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+    <h3 class="text-lg font-bold text-gray-800">
+      Rincian Penjualan Terakhir
+    </h3>
+    <a
+      class="text-xs font-medium text-primary hover:text-primary-dark transition-colors"
+      href="#"
+    >
+      Lihat Semua
+    </a>
+  </div>
+
+  <div class="overflow-x-auto custom-scrollbar flex-1">
+    <table class="w-full text-left text-sm text-text-muted">
+      <thead
+        class="bg-gray-50 text-xs uppercase text-gray-500 font-semibold tracking-wider"
+      >
+        <tr>
+          <th class="px-6 py-3">Tanggal</th>
+          <th class="px-6 py-3">Produk</th>
+          <th class="px-6 py-3">Jumlah</th>
+          <th class="px-6 py-3 text-right">Total</th>
+          <th class="px-6 py-3 text-center">Status</th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-50">
+        <!-- 12 Desember -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-4 font-medium text-text-main">
+            12 Des 2025
+          </td>
+          <td class="px-6 py-4">Sambal Lele</td>
+          <td class="px-6 py-4">3 Produk</td>
+          <td class="px-6 py-4 text-right font-medium text-text-main">
+            Rp 39.000
+          </td>
+          <td class="px-6 py-4 text-center">
+            <span
+              class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10"
             >
-              <h3 class="text-lg font-bold text-gray-800">
-                Rincian Penjualan Terakhir
-              </h3>
-              <a
-                class="text-xs font-medium text-primary hover:text-primary-dark transition-colors"
-                href="#"
-                >Lihat Semua</a
-              >
-            </div>
-            <div class="overflow-x-auto custom-scrollbar flex-1">
-              <table class="w-full text-left text-sm text-text-muted">
-                <thead
-                  class="bg-gray-50 text-xs uppercase text-gray-500 font-semibold tracking-wider"
-                >
-                  <tr>
-                    <th class="px-6 py-3" scope="col">Tanggal</th>
-                    <th class="px-6 py-3" scope="col">Produk</th>
-                    <th class="px-6 py-3" scope="col">Channel</th>
-                    <th class="px-6 py-3 text-right" scope="col">Total</th>
-                    <th class="px-6 py-3 text-center" scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-50">
-                  <tr class="bg-white hover:bg-gray-50 transition-colors">
-                    <td
-                      class="px-6 py-4 whitespace-nowrap font-medium text-text-main"
-                    >
-                      24 Okt 2023
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="flex flex-col">
-                        <span class="font-medium text-text-main"
-                          >Sambal Bawang</span
-                        >
-                        <span class="text-xs text-gray-400">2 Botol</span>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4">Shopee</td>
-                    <td class="px-6 py-4 text-right font-medium text-text-main">
-                      Rp 60.000
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                      <span
-                        class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10"
-                      >
-                        Selesai
-                      </span>
-                    </td>
-                  </tr>
-                  <tr class="bg-white hover:bg-gray-50 transition-colors">
-                    <td
-                      class="px-6 py-4 whitespace-nowrap font-medium text-text-main"
-                    >
-                      24 Okt 2023
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="flex flex-col">
-                        <span class="font-medium text-text-main"
-                          >Sambal Ijo</span
-                        >
-                        <span class="text-xs text-gray-400">5 Botol</span>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4">WhatsApp</td>
-                    <td class="px-6 py-4 text-right font-medium text-text-main">
-                      Rp 150.000
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                      <span
-                        class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/10"
-                      >
-                        Proses
-                      </span>
-                    </td>
-                  </tr>
-                  <tr class="bg-white hover:bg-gray-50 transition-colors">
-                    <td
-                      class="px-6 py-4 whitespace-nowrap font-medium text-text-main"
-                    >
-                      23 Okt 2023
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="flex flex-col">
-                        <span class="font-medium text-text-main"
-                          >Sambal Terasi</span
-                        >
-                        <span class="text-xs text-gray-400">10 Botol</span>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4">Offline Store</td>
-                    <td class="px-6 py-4 text-right font-medium text-text-main">
-                      Rp 300.000
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                      <span
-                        class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10"
-                      >
-                        Selesai
-                      </span>
-                    </td>
-                  </tr>
-                  <tr class="bg-white hover:bg-gray-50 transition-colors">
-                    <td
-                      class="px-6 py-4 whitespace-nowrap font-medium text-text-main"
-                    >
-                      23 Okt 2023
-                    </td>
-                    <td class="px-6 py-4">
-                      <div class="flex flex-col">
-                        <span class="font-medium text-text-main"
-                          >Paket Bundling</span
-                        >
-                        <span class="text-xs text-gray-400">1 Paket</span>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4">Tokopedia</td>
-                    <td class="px-6 py-4 text-right font-medium text-text-main">
-                      Rp 85.000
-                    </td>
-                    <td class="px-6 py-4 text-center">
-                      <span
-                        class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"
-                      >
-                        Dikirim
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+              Selesai
+            </span>
+          </td>
+        </tr>
+
+        <!-- 13 Desember -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-4 font-medium text-text-main">
+            13 Des 2025
+          </td>
+          <td class="px-6 py-4">Sambal Bawang</td>
+          <td class="px-6 py-4">1 Produk</td>
+          <td class="px-6 py-4 text-right font-medium text-text-main">
+            Rp 13.000
+          </td>
+          <td class="px-6 py-4 text-center">
+            <span
+              class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10"
+            >
+              Selesai
+            </span>
+          </td>
+        </tr>
+
+        <!-- 23 Desember -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-4 font-medium text-text-main">
+            23 Des 2025
+          </td>
+          <td class="px-6 py-4">Sambal Ijo Ayam</td>
+          <td class="px-6 py-4">2 Produk</td>
+          <td class="px-6 py-4 text-right font-medium text-text-main">
+            Rp 26.000
+          </td>
+          <td class="px-6 py-4 text-center">
+            <span
+              class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10"
+            >
+              Selesai
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
         </div>
       </div>
     </main>
@@ -691,4 +606,57 @@
       <p>© 2026 Sambal Lele 2.0. Hak Cipta Dilindungi.</p>
     </footer>
   </body>
+  <script>
+const ctxTarget = document
+  .getElementById("targetRealisasiChart")
+  .getContext("2d");
+
+new Chart(ctxTarget, {
+  type: "bar",
+  data: {
+    labels: ["Okt", "Nov", "Des"],
+    datasets: [
+      {
+        label: "Target (Botol)",
+        data: [120, 150, 180],
+        backgroundColor: "#E5E7EB",
+        borderRadius: 6,
+      },
+      {
+        label: "Realisasi (Botol)",
+        data: [110, 140, 160],
+        backgroundColor: "#EF4444",
+        borderRadius: 6,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          boxWidth: 12,
+          usePointStyle: true,
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: "#F3F4F6",
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+    },
+  },
+});
+</script>
+
 </html>
