@@ -1,56 +1,524 @@
-# 📊 Dashboard Penjualan Sambal
+<!DOCTYPE html>
+<html lang="id">
 
-Dashboard Penjualan Sambal adalah aplikasi web statis yang menampilkan **ringkasan penjualan**, **target vs realisasi**, **rincian penjualan**, serta **varian produk terlaris**.  
-Project ini dibuat untuk kebutuhan **laporan, presentasi, tugas kuliah, atau showcase UI dashboard UMKM**.
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Sambal Lele 2.0 - Dashboard Penjualan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            // Revised Calm/Terracotta Palette
+            primary: "#b35959", // Muted Terracotta/Red
+            "primary-dark": "#8f4040", // Deeper Terracotta
+            secondary: "#f2e6e6", // Light reddish gray for backgrounds
+            "surface-dark": "#1f2937", // Standard dark gray for potential dark mode, though light is prioritized
+            "background-light": "#f9fafb", // Cool light gray
+            "background-dark": "#111827",
+            "border-light": "#e5e7eb",
+            "text-main": "#374151", // Softened black (Gray 700)
+            "text-muted": "#6b7280", // Gray 500
+          },
+          fontFamily: {
+            display: ["Inter", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.375rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            "2xl": "1rem",
+            full: "9999px",
+          },
+          boxShadow: {
+            soft: "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+          },
+        },
+      },
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+    }
 
----
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
 
-## ✨ Fitur Utama
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f3f4f6;
+    }
 
-- 📈 **Target vs Realisasi Penjualan**
-  - Grafik bar per pekan (bulan Desember)
-  - Menampilkan target dan realisasi penjualan
-- 🛒 **Rincian Penjualan Terakhir**
-  - Tabel transaksi dengan tanggal, produk, jumlah, total, dan status
-- 🔥 **Varian Terlaris**
-  - Progress bar berdasarkan jumlah produk terjual
-- 🧾 **Kontribusi Channel**
-  - Visualisasi penjualan (Offline / Pre-Order)
-- 🎨 **UI Modern & Responsif**
-  - Menggunakan Tailwind CSS
-  - Tampilan clean dan mudah dibaca
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 4px;
+    }
 
----
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #b35959;
+    }
 
-## 📦 Data Penjualan (Contoh)
+  </style>
+</head>
 
-- **Total produk terjual**: 15 produk  
-- **Harga per produk**: Rp 13.000  
-- **Bulan**: Desember 2025  
+<body
+  class="bg-background-light text-text-main min-h-screen flex flex-col font-display selection:bg-primary selection:text-white">
+  <header class="sticky top-0 z-50 w-full border-b border-border-light bg-white/90 backdrop-blur-md">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div
+            class="flex size-9 items-center justify-center rounded-lg bg-primary text-white shadow-md shadow-primary/20">
+            <span class="material-symbols-outlined">local_fire_department</span>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold leading-tight tracking-tight text-gray-800">
+              Sambal Lele 2.0
+            </h1>
+            <p class="text-[10px] text-text-muted font-medium tracking-wider uppercase">
+              UMKM Dashboard
+            </p>
+          </div>
+        </div>
+        <nav class="hidden md:flex items-center gap-8">
+          <a class="text-sm font-medium text-primary hover:text-primary-dark transition-colors" href="#">Dashboard</a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <button
+            class="hidden sm:flex h-9 items-center gap-2 rounded-lg bg-gray-50 border border-gray-200 px-3 text-xs font-medium text-text-main hover:bg-gray-100 transition-colors">
+            <span class="material-symbols-outlined text-[18px] text-text-muted">calendar_today</span>
+            <span>Jan 2026</span>
+          </button>
+          <div class="size-9 overflow-hidden rounded-full border border-gray-200 shadow-sm">
+            <img alt="Profile Avatar" class="h-full w-full object-cover" data-alt="User profile avatar of a smiling man"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUiYqr3aw0oe0-wcGmZ_8n3hhJjioKu6PfZSxfnSxdnVntHQGSGRXUbDuYwAOxOH3BtWYLXE1O194oCRi_cKWGsl2AYDKFUG51SjMuSBnDUJkPbaHNaVI9j6xy8pMvG2uBLehfC3-obAapJp8cnwXrTQevFlAOZM-Q-03Pjlbv7rAbp3DT_FP0ENyGD0yGtpv9_yO7VD2ug73P25Wwa3UcJZ8C60-L46m4Tfs9VTNgppn9NxspQMrTiM7SQmTVezmZiqn32r3oWUvG" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="flex-1 py-8">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-bold tracking-tight text-gray-800">
+            Dashboard Penjualan
+          </h2>
+          <p class="text-sm text-text-muted mt-1">
+            Ringkasan performa penjualan periode ini.
+          </p>
+        </div>
+        <!-- <div class="flex gap-3">
+            <button
+              class="flex items-center justify-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-text-main hover:bg-gray-50 transition-colors bg-white shadow-sm"
+            >
+              <span class="material-symbols-outlined text-[18px]"
+                >download</span
+              >
+              Unduh Laporan
+            </button>
+            <button
+              class="flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white shadow-lg shadow-primary/20 hover:bg-primary-dark transition-colors"
+            >
+              <span class="material-symbols-outlined text-[18px]">add</span>
+              Input Penjualan
+            </button>
+          </div> -->
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div
+          class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-soft border border-gray-100 transition-all hover:shadow-lg hover:border-primary/20">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-text-muted">Total Omzet</p>
+              <h3 class="mt-2 text-2xl font-bold text-gray-800">
+                Rp 195.000,-
+              </h3>
+            </div>
+            <div class="flex size-10 items-center justify-center rounded-lg bg-primary/5 text-primary">
+              <span class="material-symbols-outlined">payments</span>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center gap-2">
+            <span class="flex items-center text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+              <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+              12%
+            </span>
+            <span class="text-xs text-text-muted"></span>
+          </div>
+        </div>
+        <div
+          class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-soft border border-gray-100 transition-all hover:shadow-lg hover:border-primary/20">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-text-muted">Unit Terjual</p>
+              <h3 class="mt-2 text-2xl font-bold text-gray-800">
+                15 Produk
+              </h3>
+            </div>
+            <div class="flex size-10 items-center justify-center rounded-lg bg-primary/5 text-primary">
+              <span class="material-symbols-outlined">inventory_2</span>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center gap-2">
+            <span class="flex items-center text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+              <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+              5%
+            </span>
+            <span class="text-xs text-text-muted"></span>
+          </div>
+        </div>
+        <div
+          class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-soft border border-gray-100 transition-all hover:shadow-lg hover:border-primary/20">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-text-muted">Laba Bersih</p>
+              <h3 class="mt-2 text-2xl font-bold text-gray-800">
+                Rp 75.000,-
+              </h3>
+            </div>
+            <div class="flex size-10 items-center justify-center rounded-lg bg-primary/5 text-primary">
+              <span class="material-symbols-outlined">account_balance_wallet</span>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center gap-2">
+            <span class="flex items-center text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+              <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+              8%
+            </span>
+            <span class="text-xs text-text-muted"></span>
+          </div>
+        </div>
+        <div
+          class="group relative overflow-hidden rounded-xl bg-white p-6 shadow-soft border border-gray-100 transition-all hover:shadow-lg hover:border-primary/20">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-text-muted">Margin (%)</p>
+              <h3 class="mt-2 text-2xl font-bold text-gray-800">38%</h3>
+            </div>
+            <div class="flex size-10 items-center justify-center rounded-lg bg-primary/5 text-primary">
+              <span class="material-symbols-outlined">percent</span>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center gap-2">
+            <span class="flex items-center text-xs font-medium text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+              <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+              2%
+            </span>
+            <span class="text-xs text-text-muted"></span>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 rounded-xl bg-white p-6 shadow-soft border border-gray-100">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-bold text-gray-800">
+              Tren Penjualan Harian
+            </h3>
+            <div class="flex gap-2 items-center">
+              <div class="size-3 rounded-full bg-primary"></div>
+              <span class="text-xs text-text-muted">Bulan Ini</span>
+            </div>
+          </div>
+          <div class="relative w-full h-[300px] flex items-end justify-between gap-2 pt-8 pb-4">
+            <div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20">
+              <div class="w-full border-t border-gray-300"></div>
+              <div class="w-full border-t border-gray-300"></div>
+              <div class="w-full border-t border-gray-300"></div>
+              <div class="w-full border-t border-gray-300"></div>
+              <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <svg class="absolute inset-x-0 bottom-8 h-[240px] w-full" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="gradient-primary" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#b35959" stop-opacity="0.2"></stop>
+                  <stop offset="100%" stop-color="#b35959" stop-opacity="0"></stop>
+                </linearGradient>
+              </defs>
+              <path
+                d="M0 200 C 50 200, 100 150, 150 160 C 200 170, 250 80, 300 90 C 350 100, 400 180, 450 140 C 500 100, 550 50, 600 60 C 650 70, 700 120, 750 80 C 800 40, 850 60, 900 30 L 900 240 L 0 240 Z"
+                fill="url(#gradient-primary)"></path>
+              <path
+                d="M0 200 C 50 200, 100 150, 150 160 C 200 170, 250 80, 300 90 C 350 100, 400 180, 450 140 C 500 100, 550 50, 600 60 C 650 70, 700 120, 750 80 C 800 40, 850 60, 900 30"
+                fill="none" stroke="#b35959" stroke-linecap="round" stroke-width="3" vector-effect="non-scaling-stroke">
+              </path>
+              <circle cx="150" cy="160" fill="#b35959" r="4" stroke="white" stroke-width="2"></circle>
+              <circle cx="300" cy="90" fill="#b35959" r="4" stroke="white" stroke-width="2"></circle>
+              <circle cx="450" cy="140" fill="#b35959" r="4" stroke="white" stroke-width="2"></circle>
+              <circle cx="600" cy="60" fill="#b35959" r="4" stroke="white" stroke-width="2"></circle>
+              <circle cx="750" cy="80" fill="#b35959" r="4" stroke="white" stroke-width="2"></circle>
+            </svg>
+            <div class="absolute bottom-0 w-full flex justify-between text-xs text-text-muted px-2">
+              <span>Sen</span>
+              <span>Sel</span>
+              <span>Rab</span>
+              <span>Kam</span>
+              <span>Jum</span>
+              <span>Sab</span>
+              <span>Min</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex-1 rounded-xl bg-white p-6 shadow-soft border border-gray-100">
+          <h3 class="text-sm font-bold text-gray-800 mb-4">
+            Varian Terlaris
+          </h3>
+          <div class="space-y-4">
+            <!-- Sambal Bawang -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-text-muted">Sambal Bawang</span>
+                <span class="font-bold text-gray-800">7</span>
+              </div>
+              <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-primary rounded-full" style="width: 100%"></div>
+              </div>
+            </div>
 
-### Distribusi Varian:
-| Varian           | Jumlah |
-|------------------|--------|
-| Sambal Bawang    | 7      |
-| Sambal Ijo       | 5      |
-| Sambal Terasi    | 3      |
-| **Total**        | **15** |
+            <!-- Sambal Ijo -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-text-muted">Sambal Ijo</span>
+                <span class="font-bold text-gray-800">5</span>
+              </div>
+              <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-primary/70 rounded-full" style="width: 70%"></div>
+              </div>
+            </div>
 
----
+            <!-- Sambal Terasi -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-text-muted">Sambal Terasi</span>
+                <span class="font-bold text-gray-800">3</span>
+              </div>
+              <div class="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-primary/40 rounded-full" style="width: 45%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-## 🛠️ Teknologi yang Digunakan
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="rounded-xl bg-white p-6 shadow-soft border border-gray-100">
+          <h3 class="text-lg font-bold text-gray-800 mb-4">
+            Target vs Realisasi Penjualan
+          </h3>
 
-- **HTML5**
-- **Tailwind CSS**
-- **Chart.js**
-- **JavaScript (Vanilla)**
+          <div class="h-[260px]">
+            <canvas id="targetRealisasiChart"></canvas>
+          </div>
 
----
+          <div class="mt-4 flex justify-end gap-4 text-xs text-text-muted">
+            <span class="flex items-center gap-1">
+              <span class="w-2 h-2 bg-gray-300 rounded-full"></span> Target
+            </span>
+            <span class="flex items-center gap-1">
+              <span class="w-2 h-2 bg-primary rounded-full"></span> Realisasi
+            </span>
+          </div>
+        </div>
 
-## 📁 Struktur Anggota
+        <div class="lg:col-span-2 rounded-xl bg-white shadow-soft border border-gray-100 overflow-hidden flex flex-col">
+          <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-800">
+              Rincian Penjualan Terakhir
+            </h3>
+            <a class="text-xs font-medium text-primary hover:text-primary-dark transition-colors" href="#">
+              Lihat Semua
+            </a>
+          </div>
 
-- 1. Wahyu Ahmad Yassin
-- 2. Salman Maula Ash Shidqi
-- 3. Iqbal Dwi Kurniawan
-- 4. M. Ikhsan Aflahal
+          <div class="overflow-x-auto custom-scrollbar flex-1">
+            <table class="w-full text-left text-sm text-text-muted">
+              <thead class="bg-gray-50 text-xs uppercase text-gray-500 font-semibold tracking-wider">
+                <tr>
+                  <th class="px-6 py-3">Tanggal</th>
+                  <th class="px-6 py-3">Produk</th>
+                  <th class="px-6 py-3">Jumlah</th>
+                  <th class="px-6 py-3 text-right">Total</th>
+                  <th class="px-6 py-3 text-center">Status</th>
+                </tr>
+              </thead>
 
+              <tbody class="divide-y divide-gray-50">
+                <!-- 12 Desember -->
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 font-medium text-text-main">
+                    12 Des 2025
+                  </td>
+                  <td class="px-6 py-4">Sambal Lele</td>
+                  <td class="px-6 py-4">3 Produk</td>
+                  <td class="px-6 py-4 text-right font-medium text-text-main">
+                    Rp 39.000
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <span
+                      class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
+                      Selesai
+                    </span>
+                  </td>
+                </tr>
+
+                <!-- 13 Desember -->
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 font-medium text-text-main">
+                    13 Des 2025
+                  </td>
+                  <td class="px-6 py-4">Sambal Bawang</td>
+                  <td class="px-6 py-4">2 Produk</td>
+                  <td class="px-6 py-4 text-right font-medium text-text-main">
+                    Rp 26.000
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <span
+                      class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
+                      Selesai
+                    </span>
+                  </td>
+                </tr>
+
+                <!-- 15 Desember -->
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 font-medium text-text-main">
+                    15 Des 2025
+                  </td>
+                  <td class="px-6 py-4">Sambal Ijo Ayam</td>
+                  <td class="px-6 py-4">4 Produk</td>
+                  <td class="px-6 py-4 text-right font-medium text-text-main">
+                    Rp 52.000
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <span
+                      class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
+                      Selesai
+                    </span>
+                  </td>
+                </tr>
+
+                <!-- 18 Desember -->
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 font-medium text-text-main">
+                    18 Des 2025
+                  </td>
+                  <td class="px-6 py-4">Sambal Lele</td>
+                  <td class="px-6 py-4">3 Produk</td>
+                  <td class="px-6 py-4 text-right font-medium text-text-main">
+                    Rp 39.000
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <span
+                      class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
+                      Selesai
+                    </span>
+                  </td>
+                </tr>
+
+                <!-- 23 Desember -->
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 font-medium text-text-main">
+                    23 Des 2025
+                  </td>
+                  <td class="px-6 py-4">Sambal Bawang</td>
+                  <td class="px-6 py-4">3 Produk</td>
+                  <td class="px-6 py-4 text-right font-medium text-text-main">
+                    Rp 39.000
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <span
+                      class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/10">
+                      Selesai
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+
+  </main>
+  <footer class="mt-8 border-t border-gray-200 py-6 text-center text-xs text-gray-400 bg-white">
+    <p>© 2026 Sambal Lele 2.0. Hak Cipta Dilindungi.</p>
+  </footer>
+</body>
+<script>
+  const ctxTarget = document
+    .getElementById("targetRealisasiChart")
+    .getContext("2d");
+
+new Chart(ctxTarget, {
+type: "bar",
+data: {
+labels: ["Pekan 1", "Pekan 2", "Pekan 3", "Pekan 4"],
+datasets: [
+{
+label: "Target (Produk)",
+data: [5, 5, 5, 5],
+backgroundColor: "#E5E7EB",
+borderRadius: 6,
+},
+{
+label: "Realisasi (Produk)",
+data: [3, 4, 5, 3],
+backgroundColor: "#EF4444",
+borderRadius: 6,
+},
+],
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: {
+legend: {
+position: "bottom",
+labels: {
+boxWidth: 12,
+usePointStyle: true,
+},
+},
+tooltip: {
+callbacks: {
+label: function (context) {
+return `${context.dataset.label}: ${context.raw} Produk`;
+},
+},
+},
+},
+scales: {
+y: {
+beginAtZero: true,
+ticks: {
+stepSize: 1,
+},
+grid: {
+color: "#F3F4F6",
+},
+},
+x: {
+grid: {
+display: false,
+},
+},
+},
+},
+});
+</script>
+
+</html>
